@@ -1,0 +1,6 @@
+@Klinos.Api_HostAddress = http://localhost:5197
+
+GET {{Klinos.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,20 @@
+# .NET / C#
+[Bb]in/
+[Oo]bj/S
+*.user
+*.suo
+.vs/
+*.db
+
+# Node.js / React (Vite)
+node_modules/
+dist/
+.env
+.env.local
+
+# Archivos de Sistema y Sistema Operativo
+.DS_Store
+Thumbs.db
+
+# Almacenamiento local de archivos médicos de KlinOS
+AlmacenamientoLocal/
