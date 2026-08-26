@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import PanelDoctor from './pages/PanelDoctor';
 import PanelPaciente from './pages/PanelPaciente';
 import ProtectedRoute from './components/ProtectedRoute';
+import PanelClinica from './pages/PanelClinica.jsx';
 
 // ==========================================
 // EL INTERCEPTOR DE AXIOS (Guardaespaldas)
@@ -59,7 +60,13 @@ function App() {
         />
         
         <Route path="*" element={<Login />} />
+      
+            <Route path="/panel-clinica" element={
+        <PanelClinica />} />
+      
       </Routes>
+
+
     </BrowserRouter>
   );
 }

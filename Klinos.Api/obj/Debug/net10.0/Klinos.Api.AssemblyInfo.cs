@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Klinos.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+afba7e73f87ab53490d1a37966b3bbedf0515d46")]
 [assembly: System.Reflection.AssemblyProductAttribute("Klinos.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Klinos.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

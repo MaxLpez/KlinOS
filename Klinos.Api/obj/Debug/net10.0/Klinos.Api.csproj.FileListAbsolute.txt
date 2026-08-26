@@ -169,3 +169,4 @@ C:\Users\Game_\OneDrive\Escritorio\KlinOS\Klinos.Api\obj\Debug\net10.0\ref\Klino
 C:\Users\Game_\OneDrive\Escritorio\KlinOS\Klinos.Api\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Game_\OneDrive\Escritorio\KlinOS\Klinos.Api\bin\Debug\net10.0\Microsoft.Bcl.Cryptography.dll
 C:\Users\Game_\OneDrive\Escritorio\KlinOS\Klinos.Api\bin\Debug\net10.0\BCrypt-Net-Next.dll
+C:\Users\Game_\OneDrive\Escritorio\KlinOS\Klinos.Api\obj\Debug\net10.0\Klinos.Api.sourcelink.json
