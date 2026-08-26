@@ -3,8 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ChatVentana from "../components/chat/ChatVentana";
 import ChatFlotante from '../components/chat/ChatFlotante';
+import { ClinicaContext } from "../ClinicaContext";
+import { useContext } from "react";
 
 export default function PanelPaciente() {
+  const { datosGlobales } = useContext(ClinicaContext);
   const [vistaActiva, setVistaActiva] = useState("muro");
   const [publicaciones, setPublicaciones] = useState([]);
   const [citas, setCitas] = useState([]);
@@ -71,7 +74,20 @@ export default function PanelPaciente() {
       
       {/* --- BARRA LATERAL DEL PACIENTE --- */}
       <div style={{ width: "250px", backgroundColor: "#2c3e50", color: "white", padding: "20px", display: "flex", flexDirection: "column" }}>
-        <h2>KlinOS <span style={{ fontSize: "14px", color: "#3498db" }}>Pacientes</span></h2>
+        {/* ENCABEZADO DINÁMICO */}
+        <div style={{ textAlign: "center", marginBottom: "20px", borderBottom: "1px solid #1abc9c", paddingBottom: "20px" }}>
+          {datosGlobales.ruta_Local_Logo ? (
+            <img 
+              src={`${import.meta.env.VITE_API_URL}${datosGlobales.ruta_Local_Logo}`} 
+              alt="Logo Clínica" 
+              style={{ width: "100%", maxHeight: "80px", objectFit: "contain", backgroundColor: "white", padding: "5px", borderRadius: "8px" }}
+            />
+          ) : (
+            <h1 style={{ margin: 0, fontSize: "40px" }}>🏥</h1>
+          )}
+          <h3 style={{ marginTop: "10px", wordWrap: "break-word", color: "#ecf0f1" }}>{datosGlobales.nombre_Clinica}</h3>
+          <p style={{ margin: 0, color: "#a3e4d7", fontWeight: "bold", fontSize: "14px" }}>Portal del Paciente</p>
+        </div>
         
         <ul style={{ listStyle: "none", padding: 0, marginTop: "30px", flexGrow: 1 }}>
           <li

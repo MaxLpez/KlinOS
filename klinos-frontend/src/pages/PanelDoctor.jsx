@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PanelChatDoctor from "../components/chat/PanelChatDoctor";
+import { useContext } from "react";
+import { ClinicaContext } from "../ClinicaContext";
 
 export default function PanelDoctor() {
+  const { datosGlobales } = useContext(ClinicaContext);
   // ==========================================
   // 1. ESTADOS
   // ==========================================
@@ -296,7 +299,19 @@ export default function PanelDoctor() {
           flexDirection: "column",
         }}
       >
-        <h2>KlinOS</h2>
+        <div style={{ textAlign: "center", marginBottom: "20px", borderBottom: "1px solid #34495e", paddingBottom: "20px" }}>
+          {datosGlobales.ruta_Local_Logo ? (
+            <img 
+              src={`${import.meta.env.VITE_API_URL}${datosGlobales.ruta_Local_Logo}`} 
+              alt="Logo" 
+              style={{ width: "100%", maxHeight: "80px", objectFit: "contain", backgroundColor: "white", padding: "5px", borderRadius: "8px" }}
+            />
+          ) : (
+            <h1 style={{ margin: 0, fontSize: "40px" }}>🏢</h1>
+          )}
+          <h3 style={{ marginTop: "10px", wordWrap: "break-word", color: "#ecf0f1" }}>{datosGlobales.nombre_Clinica}</h3>
+          <p style={{ margin: 0, color: "#3498db", fontWeight: "bold", fontSize: "14px" }}>Portal Médico</p>
+        </div>
         <ul
           style={{
             listStyle: "none",

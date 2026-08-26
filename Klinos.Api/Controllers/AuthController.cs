@@ -25,14 +25,40 @@ namespace Klinos.Api.Controllers
             _config = config;
         }
 
-        [HttpPost("login")]
+[HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             string emailLimpio = request.Email?.Trim().ToLower() ?? "";
 
             // ==========================================
-            // 1. INTENTAR INICIAR SESIÓN COMO DOCTOR
+            // 1. INTENTAR INICIAR SESIÓN COMO CLÍNICA (Administrador SaaS)
+            // ==========================================
+            var clinica = await _context.Clinicas
+                .FirstOrDefaultAsync(c => c.Email_Administrador == emailLimpio);
+
+            if (clinica != null && BCrypt.Net.BCrypt.Verify(request.Password, clinica.Password_Hash))
+            {
+                // Validación SaaS: ¿Aún tiene días gratis o pagados?
+                if (!clinica.Suscripcion_Activa)
+                {
+                    return Unauthorized(new { mensaje = "Tu periodo de prueba ha expirado. Por favor, renueva tu suscripción." });
+                }
+
+                var claimsClinica = new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, clinica.Id.ToString()),
+                    new Claim(ClaimTypes.Email, clinica.Email_Administrador),
+                    new Claim("ClinicaNombre", clinica.Nombre_Clinica),
+                    new Claim("clinicaId", clinica.Id.ToString()),
+                    new Claim("rol", "Clinica") // 👈 Clave fundamental para el ruteo de React
+                };
+
+                return Ok(new { token = GenerarTokenJWT(claimsClinica) });
+            }
+
+            // ==========================================
+            // 2. INTENTAR INICIAR SESIÓN COMO DOCTOR
             // ==========================================
             var doctor = await _context.Doctores
                 .FirstOrDefaultAsync(d => d.Email == emailLimpio);
@@ -48,14 +74,15 @@ namespace Klinos.Api.Controllers
                     new Claim(ClaimTypes.Email, doctor.Email),
                     new Claim(ClaimTypes.Name, doctor.Nombre_Completo),
                     new Claim("ClinicaNombre", nombreClinicaDoc),
-                    new Claim("rol", "Doctor") // Clave para React
+                    new Claim("clinicaId", doctor.Clinica_ID.ToString()), // 👈 Agregado para que los doctores también sepan a qué clínica pertenecen en React
+                    new Claim("rol", "Doctor")
                 };
 
                 return Ok(new { token = GenerarTokenJWT(claimsDoctor) });
             }
 
             // ==========================================
-            // 2. INTENTAR INICIAR SESIÓN COMO PACIENTE
+            // 3. INTENTAR INICIAR SESIÓN COMO PACIENTE
             // ==========================================
             var paciente = await _context.Pacientes
                 .FirstOrDefaultAsync(p => p.Email == emailLimpio);
@@ -65,7 +92,8 @@ namespace Klinos.Api.Controllers
                 // VALIDACIÓN DE SEGURIDAD: ¿Ya verificó su correo?
                 if (!paciente.IsVerified)
                 {
-                    return Unauthorized("Debes verificar tu cuenta ingresando el código de 6 dígitos enviado a tu correo antes de iniciar sesión.");
+                    // Devolvemos formato JSON para que React lo lea correctamente en error.response.data.mensaje
+                    return Unauthorized(new { mensaje = "Debes verificar tu cuenta ingresando el código enviado a tu correo antes de iniciar sesión." });
                 }
 
                 var clinicaPac = await _context.Set<Clinica>().FindAsync(paciente.Clinica_ID);
@@ -78,14 +106,14 @@ namespace Klinos.Api.Controllers
                     new Claim(ClaimTypes.Name, paciente.Nombre_Completo),
                     new Claim("ClinicaNombre", nombreClinicaPac),
                     new Claim("clinicaId", paciente.Clinica_ID.ToString()),
-                    new Claim("rol", "Paciente") // Clave para React
+                    new Claim("rol", "Paciente") 
                 };
 
                 return Ok(new { token = GenerarTokenJWT(claimsPaciente) });
             }
 
-            // Si no coincidió con ninguno
-            return Unauthorized("Correo o contraseña incorrectos.");
+            // Si no coincidió con ninguno (JSON para evitar que React colapse leyendo texto plano)
+            return Unauthorized(new { mensaje = "Correo o contraseña incorrectos." });
         }
 
         // Método auxiliar para evitar repetir código al generar el JWT

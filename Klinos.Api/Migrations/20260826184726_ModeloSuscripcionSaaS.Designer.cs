@@ -4,6 +4,7 @@ using Klinos.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Klinos.Api.Migrations
 {
     [DbContext(typeof(KlinosDbContext))]
-    partial class KlinosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260826184726_ModeloSuscripcionSaaS")]
+    partial class ModeloSuscripcionSaaS
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,15 +176,7 @@ namespace Klinos.Api.Migrations
                     b.Property<DateTime>("Fecha_Registro")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Metodo_Pago")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Nombre_Clinica")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Numero_Licencia")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -195,9 +190,6 @@ namespace Klinos.Api.Migrations
                     b.Property<string>("Subdominio_URL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Suscripcion_Cancelada")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Telefono_Contacto")
                         .HasColumnType("nvarchar(max)");
